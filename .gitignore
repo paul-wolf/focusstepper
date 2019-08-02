@@ -1,0 +1,74 @@
+archive
+data
+.venv
+
+.idea
+.coverage
+
+django.wsgi
+#log/*
+deployment/.vagrant
+
+*_local.py
+
+/newrelic.ini
+static/
+docs/build
+docs/modules
+media/
+uploads/
+
+*.py[cod]
+
+# C extensions
+*.so
+
+*.*~
+*~
+
+\#*#
+
+# Packages
+*.egg
+*.egg-info
+#dist
+build
+eggs
+parts
+#bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Mac
+.DS_Store
+
+#log/
+*.pid
+
+node_modules/
+.vagrant/
+reports/
+
+.ENV
+celerybeat-schedule
+
