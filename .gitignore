@@ -1,7 +1,10 @@
+.#*
+
+*.nef
 archive
 data
 .venv
-
+.env
 .idea
 .coverage
 

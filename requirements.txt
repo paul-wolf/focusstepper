@@ -32,3 +32,5 @@ RPi.GPIO==0.7.0
 
 spidev==3.4
 sysv-ipc==1.0.0
+python-dotenv
+boto3
