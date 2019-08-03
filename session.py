@@ -73,7 +73,7 @@ def new_session():
     stack_pos = 0
     stack_count = 10
     stack = str(uuid.uuid4())
-    info()
+    session_info()
 
     
 def capture_image():
@@ -95,7 +95,7 @@ def capture_stack():
             step_increment=step_increment
         )
         time.sleep(0.5)
-
+    print("Stack complete: {}".format(stack))
     
 def getch():
     fd = sys.stdin.fileno()
