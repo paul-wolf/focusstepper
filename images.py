@@ -15,9 +15,14 @@ from s3 import get_s3, store_stream_s3, get_matching_s3_keys, get_object_to_file
 
 load_dotenv()
 BUCKET = os.environ.get("BUCKET")
+PATH_DATA = os.environ.get("PATH_DATA", "./data")
 
 def convert_stack(stack):
-    path = os.path.join("./data/", stack, "*.nef")
+    p = os.path.join(PATH_DATA, stack)
+    if not os.path.exists(p):
+        print("Path does not exist: {}".format(p))
+            raise SystemExit
+    path = os.path.join(PATH_DATA, stack, "*.nef")
     print("Stack data: ", path)
     files = glob.glob(path)
     for fp in files:
@@ -25,3 +30,6 @@ def convert_stack(stack):
         print("converting: {} => {}".format(fp, dest))
         o = subprocess.call(['convert', fp, dest])
         print(o)
+
+if __name__ == "__main__":
+    sys.exit(convert_stack(argv[1]))
