@@ -15,6 +15,7 @@ load_dotenv()
 BUCKET = os.environ.get("BUCKET")
 PATH_DATA = os.environ.get("PATH_DATA", "./data")
 
+
 def get_files(stack, spec):
     path = os.path.join(PATH_DATA, stack)
     if not os.path.exists(path):
@@ -24,7 +25,8 @@ def get_files(stack, spec):
     for fp in files:
         key = os.path.join(stack, fp.split("/")[-1])
         print("uploading: {} => {}".format(fp, key))
-        store_stream_s3(BUCKET, open(fp, 'rb'), key)
+        store_stream_s3(BUCKET, open(fp, "rb"), key)
+
 
 def get_files(stack, spec):
     path = PATH_DATA
@@ -36,8 +38,9 @@ def get_files(stack, spec):
         if not os.path.exists(stack_dir):
             os.makedirs(stack_dir)
         print("{} => {}".format(key, filepath))
-              
+
         get_object_to_file(BUCKET, key, filepath)
-            
+
+
 if __name__ == "__main__":
     sys.exit(get_files(sys.argv[1], sys.argv[2]))

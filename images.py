@@ -16,6 +16,7 @@ load_dotenv()
 BUCKET = os.environ.get("BUCKET")
 PATH_DATA = os.environ.get("PATH_DATA", "./data")
 
+
 def convert_stack(stack):
     p = os.path.join(PATH_DATA, stack)
     if not os.path.exists(p):
@@ -27,14 +28,18 @@ def convert_stack(stack):
     for fp in files:
         dest = fp.replace(".nef", ".tiff")
         print("converting: {} => {}".format(fp, dest))
-        o = subprocess.call(['convert', fp, dest])
+        o = subprocess.call(["convert", fp, dest])
         print(o)
+
 
 def enfuse_merge(stack):
     path = os.path.join(PATH_DATA, stack, "output.tif")
-    s = """enfuse --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --gray-projector=l-star --contrast-window-size=5  --output=output.tif {stack}/*.tiff""".format(stack=stack)
+    s = """enfuse --exposure-weight=0 --saturation-weight=0 --contrast-weight=1 --hard-mask --gray-projector=l-star --contrast-window-size=5  --output=output.tif {stack}/*.tiff""".format(
+        stack=stack
+    )
     o = subprocess.call(s.split(" "))
     print(o)
-    
+
+
 if __name__ == "__main__":
     sys.exit(convert_stack(sys.argv[1]))

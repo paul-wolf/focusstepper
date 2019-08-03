@@ -36,5 +36,5 @@ while stack_pos < stack_size:
 time.sleep(1)
 
 upload_stack(str(stack))
-    
+
 print("Done!")

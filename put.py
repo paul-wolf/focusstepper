@@ -15,6 +15,7 @@ load_dotenv()
 BUCKET = os.environ.get("BUCKET")
 PATH_DATA = os.environ.get("PATH_DATA", "./data")
 
+
 def put_files(stack, spec):
     p = os.path.join(PATH_DATA, stack)
     if not os.path.exists(p):
@@ -25,7 +26,8 @@ def put_files(stack, spec):
     for fp in files:
         key = os.path.join(stack, fp.split("/")[-1])
         print("uploading: {} => {}".format(fp, key))
-        store_stream_s3(BUCKET, open(fp, 'rb'), key)
+        store_stream_s3(BUCKET, open(fp, "rb"), key)
+
 
 if __name__ == "__main__":
     sys.exit(put_files(sys.argv[1], sys.argv[2]))

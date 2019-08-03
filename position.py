@@ -27,6 +27,7 @@ stack_count = 10
 button_delay = 0.2
 step_increment = 100
 
+
 def help():
     s = """
     use keys:
@@ -43,6 +44,7 @@ def help():
     """
     print(s)
 
+
 def session_info():
     print("Base directory         : {}".format(BASE_DIR))
     print("Data path              : {}".format(PATH_DATA))
@@ -52,24 +54,28 @@ def session_info():
     files = stack_files(stack)
     for f in files:
         print(f)
-    
+
+
 def get_increment():
     global step_increment
     v = input("Enter new increment value ({}): ".format(step_increment))
     step_increment = int(v)
 
+
 def set_stack():
     global stack
     v = input("Enter stack id ({}): ".format(stack))
     stack = int(v)
-    
+
+
 def new_session():
     global stack, stack_pos, stack_count
     stack_pos = 0
     stack_count = 10
     stack = str(uuid.uuid4())
     info()
-    
+
+
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -79,54 +85,63 @@ def getch():
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
- 
+
+
 help()
 
 while True:
     char = getch()
-    if (char == "q"):
+    if char == "q":
         print("Done!")
         exit(0)
- 
-    if (char == "j"):
-        move(step_increment=step_increment,
-         direction=stepper.FORWARD,
-             style=stepper.DOUBLE)
 
-    elif (char == "l"):
-        move(step_increment=step_increment,
-         direction=stepper.BACKWARD,
-             style=stepper.DOUBLE)
+    if char == "j":
+        move(
+            step_increment=step_increment,
+            direction=stepper.FORWARD,
+            style=stepper.DOUBLE,
+        )
 
-    elif (char == "i"):
-        move(step_increment=step_increment,
-         direction=stepper.FORWARD,
-             style=stepper.SINGLE)
- 
-    elif (char == "k"):
-        move(step_increment=step_increment,
-         direction=stepper.BACKWARD,
-             style=stepper.SINGLE)
- 
-    elif (char in "?h"):
+    elif char == "l":
+        move(
+            step_increment=step_increment,
+            direction=stepper.BACKWARD,
+            style=stepper.DOUBLE,
+        )
+
+    elif char == "i":
+        move(
+            step_increment=step_increment,
+            direction=stepper.FORWARD,
+            style=stepper.SINGLE,
+        )
+
+    elif char == "k":
+        move(
+            step_increment=step_increment,
+            direction=stepper.BACKWARD,
+            style=stepper.SINGLE,
+        )
+
+    elif char in "?h":
         help()
 
-    elif (char == "p"):
+    elif char == "p":
         get_increment()
         print("New increment: {}".format(step_increment))
 
-    elif (char == "e"):
+    elif char == "e":
         set_stack()
         print("New stack: {}".format(stack))
 
-    elif (char == "s"):
+    elif char == "s":
         session_info()
 
-    elif (char == "n"):
+    elif char == "n":
         new_session()
         print("New stack session: {}".format(stack))
 
-    elif (char == "c"):
+    elif char == "c":
         path = os.path.join(PATH_DATA, stack)
         if not os.path.exists(path):
             os.makedirs(path)
@@ -134,10 +149,9 @@ while True:
         stack_pos += 1
         upload_image(stack, p)
         print("Ready")
-        
 
     else:
-        # print(hex(ord(char)))
+        #  print(hex(ord(char)))
         pass
 
 print("Done!")
