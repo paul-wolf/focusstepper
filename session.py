@@ -23,9 +23,8 @@ PATH_DATA = os.environ.get("PATH_DATA", "./data")
 
 stack = str(uuid.uuid4())
 stack_pos = 0
-stack_count = 10
-button_delay = 0.2
-step_increment = 100
+stack_count = 12
+step_increment = 50
 
 
 def help():
@@ -38,7 +37,8 @@ def help():
     e: edit stack id
     n: new stack id
     s: session info
-    : info
+    c: capture, move files to s3
+    a: capture entire stack
     h, ?: help (this message)
     q: quit
     """
@@ -73,9 +73,30 @@ def new_session():
     stack_pos = 0
     stack_count = 10
     stack = str(uuid.uuid4())
-    info()
+    session_info()
 
+    
+def capture_image():
+    global stack, stack_pos, stack_count
+    path = os.path.join(PATH_DATA, stack)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    p = capture_and_download(path, stack, stack_pos)
+    stack_pos += 1
+    upload_image(stack, p)
+    print("Ready")
 
+    
+def capture_stack():
+    global stack, stack_pos, stack_count    
+    while stack_pos < stack_count:
+        capture_image()
+        move(
+            step_increment=step_increment
+        )
+        time.sleep(0.5)
+    print("Stack complete: {}".format(stack))
+    
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -142,13 +163,10 @@ while True:
         print("New stack session: {}".format(stack))
 
     elif char == "c":
-        path = os.path.join(PATH_DATA, stack)
-        if not os.path.exists(path):
-            os.makedirs(path)
-        p = capture_and_download(path, stack, stack_pos)
-        stack_pos += 1
-        upload_image(stack, p)
-        print("Ready")
+        capture_image()
+        
+    elif char == "a":
+        capture_stack()
 
     else:
         #  print(hex(ord(char)))

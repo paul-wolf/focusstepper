@@ -59,6 +59,15 @@ sudo apt-get install -y enblend
 ```
 
 
+##Notes for Mac
+
+Install ufraw for imagemagick to be able to convert nef to tiff:
+
+```
+brew update
+brew install ufraw
+```
+
 ##References
 
 <http://zerenesystems.com/cms/stacker>
