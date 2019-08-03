@@ -23,7 +23,7 @@ PATH_DATA = os.environ.get("PATH_DATA", "./data")
 
 stack = str(uuid.uuid4())
 stack_pos = 0
-stack_count = 10
+stack_count = 12
 step_increment = 50
 
 
