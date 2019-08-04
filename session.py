@@ -25,8 +25,8 @@ DEFAULT_STEP_INCREMENT = os.environ.get("DEFAULT_STEP_INCREMENT", 30)
 
 stack = str(uuid.uuid4())
 stack_pos = 0
-stack_count = DEFAULT_STACK_COUNT
-step_increment = DEFAULT_STEP_INCREMENT
+stack_count = int(DEFAULT_STACK_COUNT)
+step_increment = int(DEFAULT_STEP_INCREMENT)
 
 
 def help():
