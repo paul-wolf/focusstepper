@@ -27,7 +27,7 @@ stack = str(uuid.uuid4())
 stack_pos = 0
 stack_count = int(DEFAULT_STACK_COUNT)
 step_increment = int(DEFAULT_STEP_INCREMENT)
-
+incremental_upload = False
 
 def help():
     s = """
@@ -52,6 +52,7 @@ def help():
 def session_info():
     print("Base directory         : {}".format(BASE_DIR))
     print("Data path              : {}".format(PATH_DATA))
+    print("Incremental upload     : {}".format(incremental_upload))
     print("Current stack id       : {}".format(stack))
     print("Current stack position : {}".format(stack_pos))
     print("Step increment         : {}".format(step_increment))
@@ -102,13 +103,14 @@ def new_session():
 
 
 def capture_image():
-    global stack, stack_pos, stack_count
+    global stack, stack_pos, stack_count, incremental_upload
     path = os.path.join(PATH_DATA, stack)
     if not os.path.exists(path):
         os.makedirs(path)
     p = capture_and_download(path, stack, stack_pos)
     stack_pos += 1
-    upload_image(stack, p)
+    if incremental_upload:
+        upload_image(stack, p)
     print("Ready")
 
 
@@ -120,7 +122,11 @@ def capture_stack():
         time.sleep(0.5)
     print("Stack complete: {}".format(stack))
 
-
+def toggle_incremental_upload():
+    global incremental_upload
+    incremental_upload = not incremental_upload
+    print("Incremental upload: {}".format(incremental_upload))
+          
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -188,6 +194,9 @@ while True:
 
     elif char == "a":
         capture_stack()
+
+    elif char == "u":
+        toggle_incremental_upload()
 
     else:
         #  print(hex(ord(char)))

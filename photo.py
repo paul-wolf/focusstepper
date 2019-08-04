@@ -31,9 +31,9 @@ def capture_and_download(data_path, stack, stack_pos):
         )
     )
     gp.check_result(gp.gp_file_save(camera_file, target))
-
-    # exit camera
+        
     gp.check_result(gp.gp_camera_exit(camera))
+    camera.exit()
 
     return target
 
