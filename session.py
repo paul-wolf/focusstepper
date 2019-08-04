@@ -43,7 +43,9 @@ def help():
     a: capture entire stack
     h, ?: help (this message)
     q: quit
-    """.format(step_increment=step_increment)
+    """.format(
+        step_increment=step_increment
+    )
     print(s)
 
 
@@ -78,7 +80,7 @@ def new_session():
     stack = str(uuid.uuid4())
     session_info()
 
-    
+
 def capture_image():
     global stack, stack_pos, stack_count
     path = os.path.join(PATH_DATA, stack)
@@ -89,17 +91,16 @@ def capture_image():
     upload_image(stack, p)
     print("Ready")
 
-    
+
 def capture_stack():
-    global stack, stack_pos, stack_count    
+    global stack, stack_pos, stack_count
     while stack_pos < stack_count:
         capture_image()
-        move(
-            step_increment=step_increment
-        )
+        move(step_increment=step_increment)
         time.sleep(0.5)
     print("Stack complete: {}".format(stack))
-    
+
+
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -167,7 +168,7 @@ while True:
 
     elif char == "c":
         capture_image()
-        
+
     elif char == "a":
         capture_stack()
 
