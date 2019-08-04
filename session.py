@@ -21,21 +21,21 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 PATH_DATA = os.environ.get("PATH_DATA", "./data")
 DEFAULT_STACK_COUNT = os.environ.get("DEFAULT_STACK_COUNT", 30)
-DEFAULT_STEP_INCREMENT = os.environ.get("DEFAULT_STEP_INCREMENT", 30)
+DEFAULT_STEP_SIZE = os.environ.get("DEFAULT_STEP_SIZE", 30)
 
 stack = str(uuid.uuid4())
 stack_pos = 0
 stack_count = int(DEFAULT_STACK_COUNT)
-step_increment = int(DEFAULT_STEP_INCREMENT)
+step_size = int(DEFAULT_STEP_SIZE)
 incremental_upload = False
 
 def help():
     s = """
     use keys:
 
-    i, j: forward by step increment ({step_increment})
-    k, l: backward by increment ({step_increment})
-    p: set parameters (step increment) 
+    i, j: forward by step size ({step_size})
+    k, l: backward by size ({step_size})
+    p: set parameters (step size) 
     e: edit stack id
     n: new session
     s: session info
@@ -44,7 +44,7 @@ def help():
     h, ?: help (this message)
     q: quit
     """.format(
-        step_increment=step_increment
+        step_size=step_size
     )
     print(s)
 
@@ -55,7 +55,7 @@ def session_info():
     print("Incremental upload     : {}".format(incremental_upload))
     print("Current stack id       : {}".format(stack))
     print("Current stack position : {}".format(stack_pos))
-    print("Step increment         : {}".format(step_increment))
+    print("Step size              : {}".format(step_size))
     print("Stack count            : {}".format(stack_count))
     print("Files: ")
     files = stack_files(stack)
@@ -65,15 +65,15 @@ def session_info():
         print("<no files>")
 
 
-def get_increment():
-    global step_increment, stack_count
+def get_parameters():
+    global step_size, stack_count
 
-    v = input("Enter new increment value ({}): ".format(step_increment))
+    v = input("Enter new step size value ({}): ".format(step_size))
     if v:
-        step_increment = int(v)
-        print("New increment: {}".format(step_increment))
+        step_size = int(v)
+        print("New step size: {}".format(step_size))
     else:
-        print("step increment not changed")
+        print("step size not changed")
 
     v = input("Enter new stack count value ({}): ".format(stack_count))
     if v:
@@ -108,25 +108,33 @@ def capture_image():
     if not os.path.exists(path):
         os.makedirs(path)
     p = capture_and_download(path, stack, stack_pos)
-    stack_pos += 1
     if incremental_upload:
         upload_image(stack, p)
-    print("Ready")
+    print("Ready, stack_pos={}".format(stack_pos))
 
 
 def capture_stack():
-    global stack, stack_pos, stack_count
+    global stack, stack_pos, stack_count, step_size
     while stack_pos < stack_count:
         capture_image()
-        move(step_increment=step_increment)
-        time.sleep(0.5)
-    print("Stack complete: {}".format(stack))
+        # if we do not wait, it causes the stepper to take short steps
+        time.sleep(0.5) 
+        move(
+            step_size=step_size,
+            direction=stepper.FORWARD,
+            style=stepper.SINGLE)
+        
+        stack_pos += 1        
+        print("Ready, stack_pos={}".format(stack_pos))
+    print("Stack complete: {}, stack_pos={}".format(stack, stack_pos))
 
+    
 def toggle_incremental_upload():
     global incremental_upload
     incremental_upload = not incremental_upload
     print("Incremental upload: {}".format(incremental_upload))
-          
+
+    
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -148,37 +156,39 @@ while True:
 
     if char == "j":
         move(
-            step_increment=step_increment,
+            step_size=step_size,
             direction=stepper.FORWARD,
             style=stepper.DOUBLE,
         )
-
+        stack_pos -= 1
     elif char == "l":
         move(
-            step_increment=step_increment,
+            step_size=step_size,
             direction=stepper.BACKWARD,
             style=stepper.DOUBLE,
         )
-
+        stack_pos += 1
     elif char == "i":
         move(
-            step_increment=step_increment,
+            step_size=step_size,
             direction=stepper.FORWARD,
             style=stepper.SINGLE,
         )
-
+        stack_pos += 1
+        
     elif char == "k":
         move(
-            step_increment=step_increment,
+            step_size=step_size,
             direction=stepper.BACKWARD,
             style=stepper.SINGLE,
         )
-
+        stack_pos -= 1
+        
     elif char in "?h":
         help()
 
     elif char == "p":
-        get_increment()
+        get_parameters()
 
     elif char == "e":
         set_stack()
@@ -197,6 +207,36 @@ while True:
 
     elif char == "u":
         toggle_incremental_upload()
+
+    elif char == "0":
+        stack_pos = 0
+        print("Stack position: {}".format(0))
+
+    elif char == "[":
+        # move to start
+        while stack_pos > 0:
+            move(
+                step_size=step_size,
+                direction=stepper.BACKWARD,
+                style=stepper.SINGLE,
+            )
+            stack_pos -= 1            
+        print("Stack position: {}".format(stack_pos))
+        
+    elif char == "]":
+        # move to end
+        while stack_pos < stack_count:
+            move(
+                step_size=step_size,
+                direction=stepper.FORWARD,
+                style=stepper.SINGLE,
+            )
+            stack_pos += 1
+        print("Stack position: {}".format(stack_pos))
+
+    elif char == "0":
+        stack_pos = 0
+        print("Stack position: {}".format(stack_pos))
 
     else:
         #  print(hex(ord(char)))
