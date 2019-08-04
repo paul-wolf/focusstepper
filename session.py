@@ -62,22 +62,22 @@ def session_info():
         print(f)
     else:
         print("<no files>")
-        
+
+
 def get_increment():
     global step_increment, stack_count
-    
+
     v = input("Enter new increment value ({}): ".format(step_increment))
     if v:
         step_increment = int(v)
-        print("New increment: {}".format(step_increment))        
+        print("New increment: {}".format(step_increment))
     else:
         print("step increment not changed")
-
 
     v = input("Enter new stack count value ({}): ".format(stack_count))
     if v:
         stack_count = int(v)
-        print("New stack count: {}".format(stack_count))        
+        print("New stack count: {}".format(stack_count))
     else:
         print("stack count not changed")
 
@@ -90,6 +90,7 @@ def set_stack():
         print("New stack: {}".format(stack))
     else:
         print("stack id not changed")
+
 
 def new_session():
     global stack, stack_pos, stack_count
