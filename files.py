@@ -48,3 +48,8 @@ def download_stack(stack):
             os.makedirs(stack_dir)
 
         get_object_to_file(BUCKET, key, filepath)
+
+if __name__ == "__main__":
+    files = stack_files(sys.argv[1])
+    for f in files:
+        print(f)

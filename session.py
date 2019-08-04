@@ -20,19 +20,21 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 PATH_DATA = os.environ.get("PATH_DATA", "./data")
+DEFAULT_STACK_COUNT = os.environ.get("DEFAULT_STACK_COUNT", 30)
+DEFAULT_STEP_INCREMENT = os.environ.get("DEFAULT_STEP_INCREMENT", 30)
 
 stack = str(uuid.uuid4())
 stack_pos = 0
-stack_count = 12
-step_increment = 50
+stack_count = DEFAULT_STACK_COUNT
+step_increment = DEFAULT_STEP_INCREMENT
 
 
 def help():
     s = """
     use keys:
 
-    i, j: forward by increment (100 by default)
-    k, l: backward by increment (100 by default)
+    i, j: forward by step increment ({step_increment})
+    k, l: backward by increment ({step_increment})
     p: set parameters (step increment) 
     e: edit stack id
     n: new stack id
@@ -41,7 +43,7 @@ def help():
     a: capture entire stack
     h, ?: help (this message)
     q: quit
-    """
+    """.format(step_increment=step_increment)
     print(s)
 
 
@@ -50,6 +52,7 @@ def session_info():
     print("Data path              : {}".format(PATH_DATA))
     print("Current stack id       : {}".format(stack))
     print("Current stack position : {}".format(stack_pos))
+    print("Current step increment : {}".format(step_increment))
     print("Files: ")
     files = stack_files(stack)
     for f in files:
