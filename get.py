@@ -30,8 +30,10 @@ def get_files(stack, spec):
 
 def get_files(stack, spec):
     path = PATH_DATA
+    print("get files: path={}, spec={}".format(stack, spec))
     s3 = get_s3()
     keys = get_matching_s3_keys(s3, BUCKET, prefix=stack, suffix=spec)
+
     for key in keys:
         filepath = os.path.join(path, key)
         stack_dir = os.path.join(*filepath.split("/")[:-1])
