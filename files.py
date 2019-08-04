@@ -50,6 +50,12 @@ def download_stack(stack):
         get_object_to_file(BUCKET, key, filepath)
 
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        path = os.path.join(PATH_DATA, "*")
+        for f in glob.glob(path):
+            print(f)
+        sys.exit(0)
+        
     files = stack_files(sys.argv[1])
     for f in files:
         print(f)
