@@ -1,8 +1,18 @@
-This setup runs on Raspberry PI 3 and up running Raspbian, as far as I know.
+The purpose of this is to control a camera on a focus rail with a stepper motor, capture images for focus stacking.
+
+MIT License, see the license file. No warranties whatsoever. Very early version of this software. Use at your own risk, but feel free to get in touch if you want something.
+
+The main thing here is the ability to move files around cloud services. We use AWS S3 as a storage host. Once everything is installed, you can call the main utility:
+
+    ./fs
+
+This makes it very easy to capture 100 images having them all uploaded to S3 as you go. You can then easily get them to a platform where you can process them with software like https://zerenesystems.com.
+
+You'll need your own focus rail and usb connection to the camera. This setup runs on Raspberry PI 3 and up running Raspbian, as far as I know. I use a Automation Hat from Adafruit for the stepper motor control. 
 
      Linux raspberrypi 4.14.62-v7+ #1134 SMP Tue Aug 14 17:10:10 BST 2018 armv7l GNU/Linux
 
-MIT License, see the license file.
+You need at least Python 3.5. 
 
 Make sure you have a `.env` file that looks something like this:
 
