@@ -17,19 +17,19 @@ CMD=$1
 UUID=$2
 
 if [ "$CMD" == "session" ]; then
-    python session.py $UUID
+    .venv/bin/python session.py $UUID
     
 elif  [ "$CMD" == "get" ]; then
-    python get.py $UUID $3
+    .venv/bin/python get.py $UUID $3
     
 elif  [ "$CMD" == "put" ]; then    
-    python put.py $UUID $3
+    .venv/bin/python put.py $UUID $3
     
 elif  [ "$CMD" == "convert" ]; then    
-    python images.py $UUID
+    .venv/bin/python images.py $UUID
     
 elif  [ "$CMD" == "ls" ]; then    
-    python files.py $UUID
+    .venv/bin/python files.py $UUID
     
 else
     help
