@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def capture_and_download(data_path, stack, stack_pos):
-
+    
     # get camera
     callback_obj = gp.check_result(gp.use_python_logging())
     camera = gp.check_result(gp.gp_camera_new())
@@ -24,6 +24,7 @@ def capture_and_download(data_path, stack, stack_pos):
     fn, ext = file_path.name.split(".")
     filename = "{}_{}.{}".format(fn, str(stack_pos), ext)
     target = os.path.join(data_path, filename)
+
     print("Copying image to destination:", target)
     camera_file = gp.check_result(
         gp.gp_camera_file_get(
@@ -31,9 +32,9 @@ def capture_and_download(data_path, stack, stack_pos):
         )
     )
     gp.check_result(gp.gp_file_save(camera_file, target))
-
-    # exit camera
+        
     gp.check_result(gp.gp_camera_exit(camera))
+    camera.exit()
 
     return target
 
